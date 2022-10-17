@@ -194,6 +194,10 @@ export const useHashConnect = () => {
         returnTransaction: return_trans,
       },
     };
+    console.log(
+      "🚀 ~ file: useHashconnect.jsx ~ line 197 ~ useHashConnect ~ transaction",
+      transaction
+    );
 
     return await hashConnect.sendTransaction(topic, transaction);
   };

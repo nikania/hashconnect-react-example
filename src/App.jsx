@@ -1,39 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import "antd/dist/antd.css";
-import {
-  Client,
-  AccountId,
-  PrivateKey,
-  PublicKey,
-  AccountCreateTransaction,
-  AccountBalanceQuery,
-  Hbar,
-  TransactionId,
-  TransactionReceipt,
-  TransferTransaction,
-  TokenCreateTransaction,
-  AccountInfoQuery,
-  TokenInfoQuery,
-  Mnemonic,
-  TokenAssociateTransaction,
-  TokenMintTransaction,
-  TokenBurnTransaction,
-  TokenWipeTransaction,
-  TokenUpdateTransaction,
-  TokenNftInfoQuery,
-  TokenType,
-  TokenSupplyType,
-  TokenPauseTransaction,
-  NftId,
-  TokenId,
-} from "@hashgraph/sdk";
 import { Button, Popconfirm, Space, Modal, Form, Input } from "antd";
 import React from "react";
-import { HashConnect } from "hashconnect";
-import { HashConnectConnectionState } from "hashconnect/dist/types";
 import { useHashConnect } from "./useHashconnect";
 import FormCreateToken from "./FormCreateToken";
+import CreateTokenTransaction from "./createTokenTransaction";
 
 function App() {
   const {
@@ -51,94 +23,31 @@ function App() {
   const [modal, contextHolder] = Modal.useModal();
   const [formCreate] = Form.useForm();
 
-  // const createToken = async () => {
-  //   modal.confirm({
-  //     onOk: (close) => {
-  //       formCreate.validateFields().then(() => {
-  //         close();
-  //         formCreate.submit();
-  //       });
-  //     },
-  //     onCancel: () => formCreate.resetFields(),
-  //     title: "Create Token",
-  //     content: (
-  //       <FormCreateToken
-  //         form={formCreate}
-  //         onSubmit={async (values) => {
-  //           console.log(
-  //             "🚀 ~ file: App.jsx ~ line 129 ~ onSubmit={ ~ values",
-  //             values
-  //           );
-  //           let accountInfo = await window.fetch(
-  //             "https://testnet.mirrornode.hedera.com/api/v1/accounts/" +
-  //               this.signingAcct,
-  //             { method: "GET" }
-  //           );
-  //           // let accountInfo:any = await window.fetch("https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/" + this.signingAcct, { method: "GET" });
-  //           accountInfo = await accountInfo.json();
-
-  //           let key = await PublicKey.fromString(accountInfo.key.key);
-
-  //           let trans = await new TokenCreateTransaction()
-  //             .setTokenName("name")
-  //             .setTokenSymbol("n")
-  //             .setDecimals(0)
-  //             .setInitialSupply(0)
-  //             .setTreasuryAccountId(this.signingAcct)
-  //             .setAdminKey(key)
-  //             .setSupplyKey(key)
-  //             .setWipeKey(key)
-  //             .setAutoRenewAccountId(this.signingAcct);
-
-  //           let transId = TransactionId.generate(this.signingAcct);
-  //           trans.setTransactionId(transId);
-  //           trans.setNodeAccountIds([new AccountId(3)]);
-
-  //           await trans.freeze();
-
-  //           let transBytes = trans.toBytes();
-
-  //           const transaction = {
-  //             topic: hashcon.topic,
-  //             byteArray: transBytes,
-
-  //             metadata: {
-  //               accountToSign: this.signingAcct,
-  //               returnTransaction: false,
-  //               hideNft: false,
-  //             },
-  //           };
-
-  //           let res = await hashcon.hashconnect.sendTransaction(
-  //             hashcon.topic,
-  //             transaction
-  //           );
-
-  //           //handle response
-  //           let responseData = {
-  //             response: res,
-  //             receipt: null,
-  //           };
-
-  //           if (res.success)
-  //             responseData.receipt = TransactionReceipt.fromBytes(res.receipt);
-
-  //           console.log(
-  //             "🚀 ~ file: App.jsx ~ line 157 ~ onSubmit={ ~ responseData",
-  //             responseData
-  //           );
-  //         }}
-  //       />
-  //     ),
-  //   });
-  // };
-
-  const createToken = () => {
-    console.log(
-      "🚀 ~ file: App.jsx ~ line 139 ~ createToken ~ createToken",
-      pairingData
-    );
+  const createToken = async () => {
+    modal.confirm({
+      onOk: (close) => {
+        formCreate.validateFields().then(() => {
+          close();
+          formCreate.submit();
+        });
+      },
+      onCancel: () => formCreate.resetFields(),
+      title: "Create Token",
+      content: (
+        <FormCreateToken
+          form={formCreate}
+          onSubmit={(values) =>
+            CreateTokenTransaction(
+              values,
+              pairingData.accountIds[0],
+              sendTransaction
+            )
+          }
+        />
+      ),
+    });
   };
+
   const handleKyc = () => {
     console.log(
       "🚀 ~ file: App.jsx ~ line 199 ~ handleKyc ~ handleKyc",
