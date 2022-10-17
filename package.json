@@ -13,7 +13,6 @@
     "antd": "^4.23.5",
     "hashconnect": "^0.2.3",
     "react": "^18.2.0",
-    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
