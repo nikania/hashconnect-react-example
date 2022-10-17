@@ -3,9 +3,9 @@ import "./App.css";
 import "antd/dist/antd.css";
 import { Button, Popconfirm, Space, Modal, Form, Descriptions } from "antd";
 import React from "react";
-import { useHashConnect } from "./useHashconnect";
-import FormCreateToken from "./FormCreateToken";
-import CreateTokenTransaction from "./createTokenTransaction";
+import { useHashConnect } from "./hooks/useHashconnect";
+import FormCreateToken from "./components/CreateToken/FormCreateToken";
+import CreateTokenTransaction from "./components/CreateToken/createTokenTransaction";
 
 function App() {
   const {
@@ -46,13 +46,27 @@ function App() {
     });
   };
 
-  const handleKyc = () => {};
+  const handleKyc = async () => {
+    modal.confirm({
+      onOk: (close) => {
+        formCreate.validateFields().then(() => {
+          close();
+          formCreate.submit();
+        });
+      },
+      onCancel: () => formCreate.resetFields(),
+      title: "Grant KYC",
+      content: (
+        <Form form={formCreate} onSubmit={(values) => values}>
+          {" "}
+        </Form>
+      ),
+    });
+  };
   const handleMint = () => {};
   const handleAssociate = () => {};
 
-  useEffect(() => {
-    // connect();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
