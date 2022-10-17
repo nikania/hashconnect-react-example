@@ -3,7 +3,7 @@ import "./App.css";
 import "antd/dist/antd.css";
 import { Button, Popconfirm, Space, Modal, Form, Input } from "antd";
 import React from "react";
-import { useHashConnect } from "./useHashconnect_old";
+import { useHashConnect } from "./useHashconnect";
 import FormCreateToken from "./FormCreateToken";
 import CreateTokenTransaction from "./createTokenTransaction";
 
