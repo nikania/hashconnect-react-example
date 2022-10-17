@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import "antd/dist/antd.css";
-import { Button, Popconfirm, Space, Modal, Form, Input } from "antd";
+import { Button, Popconfirm, Space, Modal, Form, Descriptions } from "antd";
 import React from "react";
 import { useHashConnect } from "./useHashconnect";
 import FormCreateToken from "./FormCreateToken";
@@ -18,8 +18,6 @@ function App() {
     sendTransaction,
   } = useHashConnect();
   console.log("🚀 ~ file: App.jsx ~ line 40 ~ App ~ pairingData", pairingData);
-  const [account, setAccount] = useState();
-  const [tokenId, setTokenId] = useState("0.0.1");
   const [modal, contextHolder] = Modal.useModal();
   const [formCreate] = Form.useForm();
 
@@ -48,12 +46,7 @@ function App() {
     });
   };
 
-  const handleKyc = () => {
-    console.log(
-      "🚀 ~ file: App.jsx ~ line 199 ~ handleKyc ~ handleKyc",
-      pairingData
-    );
-  };
+  const handleKyc = () => {};
   const handleMint = () => {};
   const handleAssociate = () => {};
 
@@ -63,33 +56,18 @@ function App() {
 
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-      {network != null && <div>Network: {network}</div>}
       {pairingData != null && (
-        <div>
-          <p>Connected Account Id: {pairingData.accountIds}</p>
-        </div>
+        <Descriptions title="HashPack Connection Info">
+          <Descriptions.Item label="Network">{network}</Descriptions.Item>
+          <Descriptions.Item label="Account Ids">
+            {pairingData.accountIds}
+          </Descriptions.Item>
+          <Descriptions.Item label="Encryption Key">
+            {pairingData.encryptionKey}
+          </Descriptions.Item>
+        </Descriptions>
       )}
-      <Form
-        layout="inline"
-        onFinish={({ id }) => {
-          setTokenId(id);
-          console.log("🚀 ~ file: App.jsx ~ line 56 ~ App ~ id", id);
-        }}
-      >
-        <Form.Item label="Token Id" name="id">
-          <Input default={tokenId} placeholder={tokenId} />
-        </Form.Item>
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+
       {contextHolder}
       <Button
         disabled={pairingData != null}

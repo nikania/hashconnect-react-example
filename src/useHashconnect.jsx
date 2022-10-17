@@ -29,11 +29,7 @@ export const HashConnectAPIProvider = ({
   });
 
   const initializeHashConnect = useCallback(async () => {
-    const initData = await hashConnect.init(
-      state.appMetadata,
-      "testnet",
-      false
-    );
+    const initData = await hashConnect.init(metaData, network, false);
     console.log(
       "🚀 ~ file: useHashconnect.jsx ~ line 37 ~ initialize ~ initData",
       initData
@@ -43,7 +39,7 @@ export const HashConnectAPIProvider = ({
 
     //Saved pairings will return here, generally you will only have one unless you are doing something advanced
     setState((prev) => ({ ...prev, pairingData: initData.savedPairings[0] }));
-  }, [debug, network]);
+  }, [debug, metaData, network]);
 
   useEffect(() => {
     initializeHashConnect();
