@@ -1,28 +1,25 @@
 import {
-  AccountId,
   PublicKey,
-  TransactionId,
   TransactionReceipt,
   TokenCreateTransaction,
 } from "@hashgraph/sdk";
 
-export default async function CreateTokenTransaction(values, signingAcct, sendTransaction) {
-  console.log(
-    "🚀 ~ file: App.jsx ~ line 129 ~ onSubmit={ ~ values",
-    values
-  );
-  let accountInfo = await window.fetch(
-    "https://testnet.mirrornode.hedera.com/api/v1/accounts/" +
-      signingAcct,
-    { method: "GET" }
-  );
-  // let accountInfo:any = await window.fetch("https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/" + signingAcct, { method: "GET" });
+export default async function CreateTokenTransaction(
+  values,
+  signingAcct,
+  sendTransaction
+) {
+  if (import.meta.env.VITE_DEBUG)
+    console.log("===================network", import.meta.env.VITE_NETWORK);
+
+  const URL =
+    import.meta.env.VITE_NETWORK == "mainnet"
+      ? "https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/"
+      : "https://testnet.mirrornode.hedera.com/api/v1/accounts/";
+  let accountInfo = await window.fetch(URL + signingAcct, { method: "GET" });
+
   accountInfo = await accountInfo.json();
-  console.log("🚀 ~ file: createTokenTransaction.js ~ line 41 ~ CreateTokenTransaction ~ accountInfo", accountInfo)
-
   let key = await PublicKey.fromString(accountInfo.key.key);
-  console.log("🚀 ~ file: createTokenTransaction.js ~ line 44 ~ CreateTokenTransaction ~ key", key)
-
   let trans = await new TokenCreateTransaction()
     .setTokenName(values.projectName)
     .setTokenSymbol(values.projectName)
@@ -34,31 +31,7 @@ export default async function CreateTokenTransaction(values, signingAcct, sendTr
     .setWipeKey(key)
     .setAutoRenewAccountId(signingAcct);
 
-  let transId = TransactionId.generate(signingAcct);
-  trans.setTransactionId(transId);
-  trans.setNodeAccountIds([new AccountId(3)]);
-
-  await trans.freeze();
-
-  let transBytes = trans.toBytes();
-  // console.log("🚀 ~ file: createTokenTransaction.js ~ line 64 ~ CreateTokenTransaction ~ transBytes", transBytes)
-
-  // const transaction = {
-  //   topic: topic,
-  //   byteArray: transBytes,
-
-  //   metadata: {
-  //     accountToSign: signingAcct,
-  //     returnTransaction: false,
-  //     hideNft: false,
-  //   },
-  // };
-
-  let res = await sendTransaction(
-    transBytes,
-    signingAcct
-  );
-  console.log("🚀 ~ file: createTokenTransaction.js ~ line 81 ~ CreateTokenTransaction ~ res", res)
+  let res = await sendTransaction(trans, signingAcct);
 
   //handle response
   let responseData = {
@@ -68,9 +41,4 @@ export default async function CreateTokenTransaction(values, signingAcct, sendTr
 
   if (res.success)
     responseData.receipt = TransactionReceipt.fromBytes(res.receipt);
-
-  console.log(
-    "🚀 ~ file: App.jsx ~ line 157 ~ onSubmit={ ~ responseData",
-    responseData
-  );
 }

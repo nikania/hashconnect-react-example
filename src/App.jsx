@@ -68,6 +68,8 @@ function App() {
 
   useEffect(() => {}, []);
 
+  // !!! USE TABS FOR DIFFERNT TYPES OF ACTIONS!!!
+
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
       {pairingData != null && (
