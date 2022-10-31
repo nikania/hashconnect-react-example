@@ -4,8 +4,8 @@ import "antd/dist/antd.css";
 import { Button, Popconfirm, Space, Modal, Form, Descriptions } from "antd";
 import React from "react";
 import { useHashConnect } from "./hooks/useHashconnect";
-import FormCreateToken from "./components/CreateToken/FormCreateToken";
-import CreateTokenTransaction from "./components/CreateToken/createTokenTransaction";
+import { FormCreateToken } from "./components/FormCreateToken";
+import CreateTokenTransaction from "./components/FormCreateToken";
 
 function App() {
   const {
@@ -68,7 +68,7 @@ function App() {
 
   useEffect(() => {}, []);
 
-  // !!! USE TABS FOR DIFFERNT TYPES OF ACTIONS!!!
+  // !!! USE TABS FOR DIFFERNT TYPES OF ACTIONS!!! like HTS HCS account etc
 
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
