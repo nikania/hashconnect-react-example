@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import "antd/dist/antd.css";
-import { Button, Popconfirm, Space, Modal, Form, Descriptions } from "antd";
+import {
+  Button,
+  Popconfirm,
+  Space,
+  Modal,
+  Form,
+  Descriptions,
+  Layout,
+} from "antd";
 import React from "react";
 import { useHashConnect } from "./hooks/useHashconnect";
 import { FormCreateToken } from "./components/FormCreateToken";
 import CreateTokenTransaction from "./components/FormCreateToken";
 
+const { Header, Content, Footer } = Layout;
 function App() {
   const {
     connectToExtension,
@@ -38,7 +47,7 @@ function App() {
             CreateTokenTransaction(
               values,
               pairingData.accountIds[0],
-              sendTransaction
+              sendTransaction,
             )
           }
         />
@@ -69,52 +78,63 @@ function App() {
   useEffect(() => {}, []);
 
   // !!! USE TABS FOR DIFFERNT TYPES OF ACTIONS!!! like HTS HCS account etc
+  // for each tab - different component
 
   return (
-    <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-      {pairingData != null && (
-        <Descriptions title="HashPack Connection Info">
-          <Descriptions.Item label="Network">{network}</Descriptions.Item>
-          <Descriptions.Item label="Account Ids">
-            {pairingData.accountIds}
-          </Descriptions.Item>
-          <Descriptions.Item label="Encryption Key">
-            {pairingData.encryptionKey}
-          </Descriptions.Item>
-        </Descriptions>
-      )}
+    <Layout className="layout">
+      <Header>
+        <h1 className="logo">Hashconnect React Example</h1>
+      </Header>
+      <Content className="site-layout-content">
+        <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+          {/* {pairingData != null && (
+            <Descriptions title="HashPack Connection Info">
+              <Descriptions.Item label="Network">{network}</Descriptions.Item>
+              <Descriptions.Item label="Account Ids">
+                {pairingData.accountIds}
+              </Descriptions.Item>
+              <Descriptions.Item label="Encryption Key">
+                {pairingData.encryptionKey}
+              </Descriptions.Item>
+            </Descriptions>
+          )} */}
 
-      {contextHolder}
-      <Button
-        disabled={pairingData != null}
-        type="primary"
-        onClick={connectToExtension}
-      >
-        Connect HashPack
-      </Button>
-      <Button
-        disabled={pairingData == null}
-        type="primary"
-        onClick={disconnect}
-      >
-        Disconnect HashPack
-      </Button>
-      <Button disabled={pairingData == null} onClick={createToken}>
-        Create Token
-      </Button>
-      <Button disabled={pairingData == null} onClick={handleKyc}>
-        Grant KYC
-      </Button>
-      <Button disabled={pairingData == null} onClick={handleMint}>
-        Mint Token
-      </Button>
-      <Button disabled={pairingData == null} onClick={handleAssociate}>
-        Associate Token
-      </Button>
-      <Popconfirm title="Are you sure?" okText="Yes" cancelText="No">
-        <Button>Confirm</Button>
-      </Popconfirm>
-    </Space>
+          {contextHolder}
+          <Button
+            disabled={pairingData != null}
+            type="primary"
+            onClick={connectToExtension}
+          >
+            Connect HashPack
+          </Button>
+          <Button
+            disabled={pairingData == null}
+            type="primary"
+            onClick={disconnect}
+          >
+            Disconnect HashPack
+          </Button>
+          <Button disabled={pairingData == null} onClick={createToken}>
+            Create Token
+          </Button>
+          <Button disabled={pairingData == null} onClick={handleKyc}>
+            Grant KYC
+          </Button>
+          <Button disabled={pairingData == null} onClick={handleMint}>
+            Mint Token
+          </Button>
+          <Button disabled={pairingData == null} onClick={handleAssociate}>
+            Associate Token
+          </Button>
+          <Popconfirm title="Are you sure?" okText="Yes" cancelText="No">
+            <Button>Confirm</Button>
+          </Popconfirm>
+        </Space>
+      </Content>
+      <Footer style={{ textAlign: "center" }}>
+        Ant Design ©2022 Created by{" "}
+      </Footer>
+    </Layout>
   );
 }
 

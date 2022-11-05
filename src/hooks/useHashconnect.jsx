@@ -78,7 +78,7 @@ const defaultProps = {
     icon: "https://absolute.url/to/icon.png",
   },
   network: "testnet",
-  debug: false,
+  debug: true,
 };
 
 HashConnectAPIProvider.defaultProps = defaultProps;
@@ -96,7 +96,7 @@ export const useHashConnect = () => {
     trans,
     acctToSign,
     return_trans = false,
-    hideNfts = false
+    hideNfts = false,
   ) => {
     let transId = TransactionId.generate(acctToSign);
     trans.setTransactionId(transId);
@@ -114,12 +114,13 @@ export const useHashConnect = () => {
         returnTransaction: return_trans,
       },
     };
-
     return await hashConnect.sendTransaction(topic, transaction);
   };
 
-  const disconnect = () => {
-    setState((prev) => ({ ...prev, pairingData: null }));
+  const disconnect = async () => {
+    hashConnect
+      .disconnect(pairingData.topic)
+      .then(() => setState((prev) => ({ ...prev, pairingData: null })));
   };
 
   return { ...value, connectToExtension, sendTransaction, disconnect };
