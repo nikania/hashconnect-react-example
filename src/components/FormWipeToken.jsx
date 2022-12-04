@@ -1,29 +1,20 @@
 import React from "react";
-import { Form, Input } from "antd";
-import { TokenRevokeKycTransaction, TokenGrantKycTransaction } from "@hashgraph/sdk";
+import { Form, Input, InputNumber } from "antd";
+import { TokenWipeTransaction } from "@hashgraph/sdk";
 import Common from "./Common";
 
-export default async function GrantKycTokenTransaction(values, signingAcct, sendTransaction) {
-  if (import.meta.env.VITE_DEBUG) console.log("===================GrantKycTokenTransaction");
+export default async function WipeTokenTransaction(values, signingAcct, sendTransaction) {
+  if (import.meta.env.VITE_DEBUG) console.log("===================MintTokenTransaction");
 
-  let transaction = new TokenGrantKycTransaction()
+  let transaction = new TokenWipeTransaction()
     .setTokenId(values.tokenId)
-    .setAccountId(values.accountId);
+    .setAccountId(values.accountId)
+    .setAmount(values.amount);
 
   let result = await sendTransaction(transaction, signingAcct);
 }
 
-export async function RevokeKycTokenTransaction(values, signingAcct, sendTransaction) {
-  if (import.meta.env.VITE_DEBUG) console.log("===================RevokeKycTokenTransaction");
-
-  let transaction = new TokenRevokeKycTransaction()
-    .setTokenId(values.tokenId)
-    .setAccountId(values.accountId);
-
-  let result = await sendTransaction(transaction, signingAcct);
-}
-
-export const FormTokenKyc = ({ form, onSubmit }) => {
+export const FormTokenWipe = ({ form, onSubmit }) => {
   return (
     <Form
       form={form}
@@ -32,6 +23,7 @@ export const FormTokenKyc = ({ form, onSubmit }) => {
       initialValues={{
         tokenId: "0.0.0",
         accountId: "0.0.0",
+        amount: 1,
       }}
     >
       <Form.Item
@@ -57,6 +49,17 @@ export const FormTokenKyc = ({ form, onSubmit }) => {
         ]}
       >
         <Input />
+      </Form.Item>
+      <Form.Item
+        label="Amount"
+        name="amount"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <InputNumber />
       </Form.Item>
     </Form>
   );

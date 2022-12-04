@@ -8,6 +8,12 @@ import GrantKycTokenTransaction, {
   RevokeKycTokenTransaction,
   FormTokenKyc,
 } from "../components/FormTokenKyc";
+import MintTokenTransaction, {
+  FormTokenSupply,
+  BurnTokenTransaction,
+} from "../components/FormSupplyToken";
+import DeleteTokenTransaction, { FormTokenDelete } from "../components/FormDeleteToken";
+import WipeTokenTransaction, { FormTokenWipe } from "../components/FormWipeToken";
 
 const TokenTab = () => {
   const { pairingData, sendTransaction } = useHashConnect();
@@ -15,7 +21,7 @@ const TokenTab = () => {
   const [modal, contextHolder] = Modal.useModal();
   const [form] = Form.useForm();
 
-  const createToken = async () => {
+  const formModal = async (title, formJsx) => {
     modal.confirm({
       onOk: (close) => {
         form.validateFields().then(() => {
@@ -24,61 +30,87 @@ const TokenTab = () => {
         });
       },
       onCancel: () => form.resetFields(),
-      title: "Create Token",
-      content: (
-        <FormCreateToken
-          form={form}
-          onSubmit={(values) =>
-            CreateTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
-          }
-        />
-      ),
+      title: title,
+      content: formJsx,
     });
   };
 
-  const handleGrantKyc = async () => {
-    modal.confirm({
-      onOk: (close) => {
-        form.validateFields().then(() => {
-          close();
-          form.submit();
-        });
-      },
-      onCancel: () => form.resetFields(),
-      title: "Grant KYC",
-      content: (
-        <FormTokenKyc
-          form={form}
-          onSubmit={(values) =>
-            GrantKycTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
-          }
-        />
-      ),
-    });
-  };
+  const createToken = () =>
+    formModal(
+      "Create Token",
+      <FormCreateToken
+        form={form}
+        onSubmit={(values) =>
+          CreateTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
 
-  const handleRevokeKyc = async () => {
-    modal.confirm({
-      onOk: (close) => {
-        form.validateFields().then(() => {
-          close();
-          form.submit();
-        });
-      },
-      onCancel: () => form.resetFields(),
-      title: "Revoke KYC",
-      content: (
-        <FormTokenKyc
-          form={form}
-          onSubmit={(values) =>
-            RevokeKycTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
-          }
-        />
-      ),
-    });
-  };
-  const handleMint = () => {};
-  const handle = () => {};
+  const handleDelete = () =>
+    formModal(
+      "Delete Token",
+      <FormTokenDelete
+        form={form}
+        onSubmit={(values) =>
+          DeleteTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+
+  const handleGrantKyc = () =>
+    formModal(
+      "Grant KYC",
+      <FormTokenKyc
+        form={form}
+        onSubmit={(values) =>
+          GrantKycTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+
+  const handleRevokeKyc = () =>
+    formModal(
+      "Grant KYC",
+      <FormTokenKyc
+        form={form}
+        onSubmit={(values) =>
+          RevokeKycTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+
+  const handleMint = () =>
+    formModal(
+      "Mint Token",
+      <FormTokenSupply
+        form={form}
+        onSubmit={(values) =>
+          MintTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+
+  const handleBurn = () =>
+    formModal(
+      "Burn Token",
+      <FormTokenSupply
+        form={form}
+        onSubmit={(values) =>
+          BurnTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+
+  const handleWipe = () =>
+    formModal(
+      "Wipe Token",
+      <FormTokenWipe
+        form={form}
+        onSubmit={(values) =>
+          WipeTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
 
   return (
     <Space direction="vertical" size="middle" /*style={{ display: "flex" }}*/>
@@ -86,13 +118,13 @@ const TokenTab = () => {
       <Button disabled={pairingData == null} onClick={createToken}>
         Create Token
       </Button>
-      <Button disabled={pairingData == null} onClick={handle}>
+      <Button disabled={pairingData == null} onClick={handleDelete}>
         Delete Token
       </Button>
       <Button disabled={pairingData == null} onClick={handleMint}>
         Mint Token
       </Button>
-      <Button disabled={pairingData == null} onClick={handle}>
+      <Button disabled={pairingData == null} onClick={handleBurn}>
         Burn Token
       </Button>
       <Button disabled={pairingData == null} onClick={handleGrantKyc}>
@@ -101,7 +133,7 @@ const TokenTab = () => {
       <Button disabled={pairingData == null} onClick={handleRevokeKyc}>
         Revoke KYC
       </Button>
-      <Button disabled={pairingData == null} onClick={handle}>
+      <Button disabled={pairingData == null} onClick={handleWipe}>
         Wipe Token
       </Button>
     </Space>
