@@ -65,11 +65,7 @@ function App() {
           <Button disabled={pairingData == null} type="primary" onClick={disconnect}>
             Disconnect HashPack
           </Button>
-          <Tabs items={items} />
-
-          <Popconfirm title="Are you sure?" okText="Yes" cancelText="No">
-            <Button>Confirm</Button>
-          </Popconfirm>
+          <Tabs centered items={items} />
         </Space>
       </Content>
       <Footer style={{ textAlign: "center" }}>Ant Design ©2022 Created by </Footer>

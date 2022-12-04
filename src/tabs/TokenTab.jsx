@@ -4,6 +4,10 @@ import React from "react";
 import { useHashConnect } from "../hooks/useHashconnect";
 import { FormCreateToken } from "../components/FormCreateToken";
 import CreateTokenTransaction from "../components/FormCreateToken";
+import GrantKycTokenTransaction, {
+  RevokeKycTokenTransaction,
+  FormTokenKyc,
+} from "../components/FormTokenKyc";
 
 const TokenTab = () => {
   const { pairingData, sendTransaction } = useHashConnect();
@@ -32,7 +36,7 @@ const TokenTab = () => {
     });
   };
 
-  const handleKyc = async () => {
+  const handleGrantKyc = async () => {
     modal.confirm({
       onOk: (close) => {
         form.validateFields().then(() => {
@@ -43,9 +47,33 @@ const TokenTab = () => {
       onCancel: () => form.resetFields(),
       title: "Grant KYC",
       content: (
-        <Form form={form} onSubmit={(values) => values}>
-          {" "}
-        </Form>
+        <FormTokenKyc
+          form={form}
+          onSubmit={(values) =>
+            GrantKycTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+          }
+        />
+      ),
+    });
+  };
+
+  const handleRevokeKyc = async () => {
+    modal.confirm({
+      onOk: (close) => {
+        form.validateFields().then(() => {
+          close();
+          form.submit();
+        });
+      },
+      onCancel: () => form.resetFields(),
+      title: "Revoke KYC",
+      content: (
+        <FormTokenKyc
+          form={form}
+          onSubmit={(values) =>
+            RevokeKycTokenTransaction(values, pairingData.accountIds[0], sendTransaction)
+          }
+        />
       ),
     });
   };
@@ -53,7 +81,7 @@ const TokenTab = () => {
   const handle = () => {};
 
   return (
-    <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+    <Space direction="vertical" size="middle" /*style={{ display: "flex" }}*/>
       {contextHolder}
       <Button disabled={pairingData == null} onClick={createToken}>
         Create Token
@@ -67,10 +95,10 @@ const TokenTab = () => {
       <Button disabled={pairingData == null} onClick={handle}>
         Burn Token
       </Button>
-      <Button disabled={pairingData == null} onClick={handleKyc}>
+      <Button disabled={pairingData == null} onClick={handleGrantKyc}>
         Grant KYC
       </Button>
-      <Button disabled={pairingData == null} onClick={handleKyc}>
+      <Button disabled={pairingData == null} onClick={handleRevokeKyc}>
         Revoke KYC
       </Button>
       <Button disabled={pairingData == null} onClick={handle}>

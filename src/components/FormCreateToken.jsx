@@ -1,32 +1,18 @@
 import React from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Radio,
-  Select,
-  Cascader,
-  DatePicker,
-  InputNumber,
-  TreeSelect,
-  Switch,
-  Checkbox,
-  Upload,
-} from "antd";
+import { Form, Input, Select, InputNumber, Switch } from "antd";
 import {
   PublicKey,
   TransactionReceipt,
   TokenCreateTransaction,
-  Hbar,
-  HbarUnit,
   TokenSupplyType,
   TokenType,
-  Timestamp,
 } from "@hashgraph/sdk";
 
 export default async function CreateTokenTransaction(values, signingAcct, sendTransaction) {
-  if (import.meta.env.VITE_DEBUG)
+  if (import.meta.env.VITE_DEBUG) {
     console.log("===================network", import.meta.env.VITE_NETWORK);
+    console.log("===================CreateTokenTransaction");
+  }
 
   const URL =
     import.meta.env.VITE_NETWORK == "mainnet"

@@ -8,3 +8,7 @@
 .logo {
   color: #fff;
 }
+.ant-tabs-nav-scroll {
+  display: flex;
+  justify-content: center;
+}
