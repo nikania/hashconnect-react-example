@@ -10,12 +10,7 @@ export const HashConnectAPIContext = React.createContext({
   state: HashConnectConnectionState.Disconnected,
 });
 
-export const HashConnectAPIProvider = ({
-  children,
-  metaData,
-  network,
-  debug,
-}) => {
+export const HashConnectAPIProvider = ({ children, metaData, network, debug }) => {
   const [state, setState] = useState({
     availableExtension: null,
     state: HashConnectConnectionState.Disconnected,
@@ -25,8 +20,7 @@ export const HashConnectAPIProvider = ({
   });
 
   const initializeHashConnect = useCallback(async () => {
-    if (debug)
-      console.log("===============Network: " + network + " ================");
+    if (debug) console.log("===============Network: " + network + " ================");
     const initData = await hashConnect.init(metaData, network, false);
 
     setState((prev) => ({ ...prev, topic: initData.topic }));
@@ -57,8 +51,7 @@ export const HashConnectAPIProvider = ({
 
     //This is fired when HashConnect loses connection, pairs successfully, or is starting connection
     hashConnect.connectionStatusChangeEvent.on((state) => {
-      if (debug)
-        console.log("=============hashconnect state change event", state);
+      if (debug) console.log("=============hashconnect state change event", state);
 
       setState((prev) => ({ ...prev, state: state }));
     });
@@ -92,12 +85,7 @@ export const useHashConnect = () => {
     hashConnect.connectToLocalWallet();
   };
 
-  const sendTransaction = async (
-    trans,
-    acctToSign,
-    return_trans = false,
-    hideNfts = false,
-  ) => {
+  const sendTransaction = async (trans, acctToSign, return_trans = false, hideNfts = false) => {
     let transId = TransactionId.generate(acctToSign);
     trans.setTransactionId(transId);
     trans.setNodeAccountIds([new AccountId(3)]);

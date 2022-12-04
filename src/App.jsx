@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
 import "./App.css";
 import "antd/dist/antd.css";
-import {
-  Button,
-  Popconfirm,
-  Space,
-  Modal,
-  Form,
-  Descriptions,
-  Layout,
-} from "antd";
+import { Button, Popconfirm, Space, Layout, Tabs } from "antd";
 import React from "react";
 import { useHashConnect } from "./hooks/useHashconnect";
-import { FormCreateToken } from "./components/FormCreateToken";
-import CreateTokenTransaction from "./components/FormCreateToken";
+import AccountTab from "./tabs/AccountTab";
+import TokenTab from "./tabs/TokenTab";
+import SmartContractTab from "./tabs/SmartContractTab";
+import ConsensusTab from "./tabs/ConsensusTab";
+import FileTab from "./tabs/FileTab";
 
 const { Header, Content, Footer } = Layout;
 function App() {
@@ -27,58 +21,24 @@ function App() {
     sendTransaction,
   } = useHashConnect();
   console.log("🚀 ~ file: App.jsx ~ line 40 ~ App ~ pairingData", pairingData);
-  const [modal, contextHolder] = Modal.useModal();
-  const [formCreate] = Form.useForm();
-
-  const createToken = async () => {
-    modal.confirm({
-      onOk: (close) => {
-        formCreate.validateFields().then(() => {
-          close();
-          formCreate.submit();
-        });
-      },
-      onCancel: () => formCreate.resetFields(),
-      title: "Create Token",
-      content: (
-        <FormCreateToken
-          form={formCreate}
-          onSubmit={(values) =>
-            CreateTokenTransaction(
-              values,
-              pairingData.accountIds[0],
-              sendTransaction,
-            )
-          }
-        />
-      ),
-    });
-  };
-
-  const handleKyc = async () => {
-    modal.confirm({
-      onOk: (close) => {
-        formCreate.validateFields().then(() => {
-          close();
-          formCreate.submit();
-        });
-      },
-      onCancel: () => formCreate.resetFields(),
-      title: "Grant KYC",
-      content: (
-        <Form form={formCreate} onSubmit={(values) => values}>
-          {" "}
-        </Form>
-      ),
-    });
-  };
-  const handleMint = () => {};
-  const handleAssociate = () => {};
-
-  useEffect(() => {}, []);
 
   // !!! USE TABS FOR DIFFERNT TYPES OF ACTIONS!!! like HTS HCS account etc
   // for each tab - different component
+  const items = [
+    { label: "Account", key: "Account", children: <AccountTab /> }, // remember to pass the key prop
+    { label: "Token Service", key: "Token", children: <TokenTab /> },
+    {
+      label: "SmartContract",
+      key: "SmartContract",
+      children: <SmartContractTab />,
+    },
+    {
+      label: "Consensus Service",
+      key: "Consensus",
+      children: <ConsensusTab />,
+    },
+    { label: "File Service", key: "File", children: <FileTab /> },
+  ];
 
   return (
     <Layout className="layout">
@@ -99,41 +59,20 @@ function App() {
             </Descriptions>
           )} */}
 
-          {contextHolder}
-          <Button
-            disabled={pairingData != null}
-            type="primary"
-            onClick={connectToExtension}
-          >
+          <Button disabled={pairingData != null} type="primary" onClick={connectToExtension}>
             Connect HashPack
           </Button>
-          <Button
-            disabled={pairingData == null}
-            type="primary"
-            onClick={disconnect}
-          >
+          <Button disabled={pairingData == null} type="primary" onClick={disconnect}>
             Disconnect HashPack
           </Button>
-          <Button disabled={pairingData == null} onClick={createToken}>
-            Create Token
-          </Button>
-          <Button disabled={pairingData == null} onClick={handleKyc}>
-            Grant KYC
-          </Button>
-          <Button disabled={pairingData == null} onClick={handleMint}>
-            Mint Token
-          </Button>
-          <Button disabled={pairingData == null} onClick={handleAssociate}>
-            Associate Token
-          </Button>
+          <Tabs items={items} />
+
           <Popconfirm title="Are you sure?" okText="Yes" cancelText="No">
             <Button>Confirm</Button>
           </Popconfirm>
         </Space>
       </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2022 Created by{" "}
-      </Footer>
+      <Footer style={{ textAlign: "center" }}>Ant Design ©2022 Created by </Footer>
     </Layout>
   );
 }

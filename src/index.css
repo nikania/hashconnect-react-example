@@ -19,6 +19,9 @@ div#root {
   height: 100%;
 }
 
-html, body, #root, .layout {
+html,
+body,
+#root,
+.layout {
   height: 100%;
 }

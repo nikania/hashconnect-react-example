@@ -1,16 +1,30 @@
 import React from "react";
-import { Form, Input } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Radio,
+  Select,
+  Cascader,
+  DatePicker,
+  InputNumber,
+  TreeSelect,
+  Switch,
+  Checkbox,
+  Upload,
+} from "antd";
 import {
   PublicKey,
   TransactionReceipt,
   TokenCreateTransaction,
+  Hbar,
+  HbarUnit,
+  TokenSupplyType,
+  TokenType,
+  Timestamp,
 } from "@hashgraph/sdk";
 
-export default async function CreateTokenTransaction(
-  values,
-  signingAcct,
-  sendTransaction
-) {
+export default async function CreateTokenTransaction(values, signingAcct, sendTransaction) {
   if (import.meta.env.VITE_DEBUG)
     console.log("===================network", import.meta.env.VITE_NETWORK);
 
@@ -21,44 +35,114 @@ export default async function CreateTokenTransaction(
   let accountInfo = await window.fetch(URL + signingAcct, { method: "GET" });
 
   accountInfo = await accountInfo.json();
-  let key = await PublicKey.fromString(accountInfo.key.key);
-  let trans = await new TokenCreateTransaction()
-    .setTokenName(values.projectName)
-    .setTokenSymbol(values.projectName)
-    .setDecimals(0)
-    .setInitialSupply(0)
+  let key = PublicKey.fromString(accountInfo.key.key);
+  let transaction = new TokenCreateTransaction()
+    .setTokenName(values.tokenName)
+    .setTokenSymbol(values.tokenSymbol)
+    .setInitialSupply(values.initialSupply)
     .setTreasuryAccountId(signingAcct)
     .setAdminKey(key)
     .setSupplyKey(key)
-    .setWipeKey(key)
     .setAutoRenewAccountId(signingAcct);
 
-  let res = await sendTransaction(trans, signingAcct);
+  if (values.type === TokenType.FungibleCommon.toString()) {
+    transaction.setDecimals(values.decimals);
+  } else {
+    transaction.setTokenType(TokenType.NonFungibleUnique);
+  }
+
+  if (values.supplyType === TokenSupplyType.Finite.toString()) {
+    transaction.setSupplyType(TokenSupplyType.Finite);
+    transaction.setMaxSupply(values.maxSupply);
+  }
+
+  if (values.kyc) {
+    transaction.setKycKey(key);
+  }
+
+  if (values.wipe) {
+    transaction.setWipeKey(key);
+  }
+
+  let result = await sendTransaction(transaction, signingAcct);
 
   //handle response
   let responseData = {
-    response: res,
+    response: result,
     receipt: null,
   };
 
-  if (res.success)
-    responseData.receipt = TransactionReceipt.fromBytes(res.receipt);
+  if (result.success) responseData.receipt = TransactionReceipt.fromBytes(result.receipt);
 }
 
 export const FormCreateToken = ({ form, onSubmit }) => {
   return (
-    <Form form={form} onFinish={onSubmit} labelCol={{ span: 10 }}>
-      <Form.Item required label="ProjectName" name="projectName">
+    <Form
+      form={form}
+      onFinish={onSubmit}
+      labelCol={{ span: 10 }}
+      initialValues={{
+        tokenName: "TokenTest-" + Math.random(),
+        tokenSymbol: "TT",
+        type: TokenType.FungibleCommon.toString(),
+        decimals: 0,
+        supplyType: TokenSupplyType.Infinite.toString(),
+        initialSupply: 0,
+        maxSupply: 0,
+      }}
+    >
+      <Form.Item label="Token Name" name="tokenName" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item required label="Project Type" name="projectType">
+      <Form.Item label="Token Symbol" name="tokenSymbol" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item required label="Vintage" name="vintage">
-        <Input />
+      <Form.Item label="Type" name="type">
+        <Select>
+          <Select.Option value={TokenType.FungibleCommon.toString()}>Fungible</Select.Option>
+          <Select.Option value={TokenType.NonFungibleUnique.toString()}>NFT</Select.Option>
+        </Select>
       </Form.Item>
-      <Form.Item required label="Vallidation date" name="date">
-        <Input />
+      <Form.Item
+        noStyle
+        shouldUpdate={(prevValues, currentValues) => prevValues.type !== currentValues.type}
+      >
+        {({ getFieldValue }) =>
+          getFieldValue("type") === TokenType.FungibleCommon.toString() ? (
+            <Form.Item label="Decimals" name="decimals">
+              <InputNumber />
+            </Form.Item>
+          ) : null
+        }
+      </Form.Item>
+      <Form.Item label="Supply Type" name="supplyType">
+        <Select>
+          <Select.Option value={TokenSupplyType.Finite.toString()}>Finite</Select.Option>
+          <Select.Option value={TokenSupplyType.Infinite.toString()}>Infinite</Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        noStyle
+        shouldUpdate={(prevValues, currentValues) =>
+          prevValues.supplyType !== currentValues.supplyType
+        }
+      >
+        {({ getFieldValue }) =>
+          getFieldValue("supplyType") === TokenSupplyType.Finite.toString() ? (
+            <Form.Item label="Maximum Supply" name="maxSupply">
+              <InputNumber />
+            </Form.Item>
+          ) : null
+        }
+      </Form.Item>
+      <Form.Item label="Initial Supply" name="initialSupply">
+        <InputNumber />
+      </Form.Item>
+      <Form.Item label="Enable KYC" name="kyc" valuePropName="checked">
+        <Switch />
+      </Form.Item>
+      <Form.Item label="Enable Wipe" name="wipe" valuePropName="checked">
+        <Switch />
       </Form.Item>
     </Form>
   );

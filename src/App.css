@@ -1,8 +1,9 @@
 .site-layout-content {
   min-height: 100%-64px;
-  padding:  24px;
+  padding: 24px;
   margin: 24px;
   background: #fff;
+  text-align: center;
 }
 .logo {
   color: #fff;
