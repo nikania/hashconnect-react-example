@@ -1,6 +1,6 @@
 import "./App.css";
 import "antd/dist/antd.css";
-import { Button, Popconfirm, Space, Layout, Tabs } from "antd";
+import { Button, Card, Space, Layout, Tabs, Collapse } from "antd";
 import React from "react";
 import { useHashConnect } from "./hooks/useHashconnect";
 import AccountTab from "./tabs/AccountTab";
@@ -8,6 +8,8 @@ import TokenTab from "./tabs/TokenTab";
 import SmartContractTab from "./tabs/SmartContractTab";
 import ConsensusTab from "./tabs/ConsensusTab";
 import FileTab from "./tabs/FileTab";
+
+const { Panel } = Collapse;
 
 const { Header, Content, Footer } = Layout;
 function App() {
@@ -47,28 +49,27 @@ function App() {
       </Header>
       <Content className="site-layout-content">
         <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-          {/* {pairingData != null && (
-            <Descriptions title="HashPack Connection Info">
-              <Descriptions.Item label="Network">{network}</Descriptions.Item>
-              <Descriptions.Item label="Account Ids">
-                {pairingData.accountIds}
-              </Descriptions.Item>
-              <Descriptions.Item label="Encryption Key">
-                {pairingData.encryptionKey}
-              </Descriptions.Item>
-            </Descriptions>
-          )} */}
+          {pairingData != null && (
+            <Collapse size="small">
+              <Panel header="HashPack Connection Info">
+                <p>Network: {network}</p>
+                <p>Account Id: {pairingData.accountIds}</p>
+              </Panel>
+            </Collapse>
+          )}
 
-          <Button disabled={pairingData != null} type="primary" onClick={connectToExtension}>
-            Connect HashPack
-          </Button>
-          <Button disabled={pairingData == null} type="primary" onClick={disconnect}>
-            Disconnect HashPack
-          </Button>
+          <Space>
+            <Button disabled={pairingData != null} type="primary" onClick={connectToExtension}>
+              Connect HashPack
+            </Button>
+            <Button disabled={pairingData == null} type="primary" onClick={disconnect}>
+              Disconnect HashPack
+            </Button>
+          </Space>
           <Tabs centered items={items} />
         </Space>
       </Content>
-      <Footer style={{ textAlign: "center" }}>Ant Design ©2022 Created by </Footer>
+      <Footer style={{ textAlign: "center" }}>2022 Created with Ant Design </Footer>
     </Layout>
   );
 }

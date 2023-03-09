@@ -7,9 +7,10 @@ const SmartContractTab = () => {
   const { pairingData, sendTransaction } = useHashConnect();
 
   const [modal, contextHolder] = Modal.useModal();
-  const [formCreate] = Form.useForm();
+  const [form] = Form.useForm();
 
-  const handle = () => {};
+  const handle = () => modal.confirm({ title: "TODO" });
+
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
       {contextHolder}
