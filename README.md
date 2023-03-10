@@ -1,6 +1,6 @@
 # React Hashconnect App
 
-React application that uses Hashpack wallet to create tokens, manage accounts, etc.
+Example React application using [Hashconnect library](https://github.com/Hashpack/hashconnect) to connect to Hashpack wallet to create tokens, manage accounts, etc.
 
 ## Usage
 

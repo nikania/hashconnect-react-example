@@ -6,6 +6,11 @@ import AssociateTokenTransaction, {
   DissociateTokenTransaction,
   FormTokenAssociate,
 } from "../components/FormAssociateToken";
+import UpdateAccountTransaction, { FormAccountUpdate } from "../components/FormAccountUpdate";
+import AllowanceApproveTransaction, {
+  FormAllowance,
+  FormAllowanceDelete,
+} from "../components/FormAccountAllowance";
 
 const AccountTab = () => {
   const { pairingData, sendTransaction } = useHashConnect();
@@ -49,7 +54,37 @@ const AccountTab = () => {
       />,
     );
 
-  const handle = () => modal.confirm({ title: "TODO" });
+  const handleUpdate = () =>
+    formModal(
+      "Update Account",
+      <FormAccountUpdate
+        form={form}
+        onSubmit={(values) =>
+          UpdateAccountTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+
+  const handleAllowanceApprove = () =>
+    formModal(
+      "Approve Allowance",
+      <FormAllowance
+        form={form}
+        onSubmit={(values) =>
+          AllowanceApproveTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
+  const handleAllowanceDelete = () =>
+    formModal(
+      "Delete Allowance",
+      <FormAllowanceDelete
+        form={form}
+        onSubmit={(values) =>
+          AllowanceApproveTransaction(values, pairingData.accountIds[0], sendTransaction)
+        }
+      />,
+    );
 
   return (
     <Space direction="vertical" size="middle" style={{ display: "flex" }}>
@@ -60,13 +95,13 @@ const AccountTab = () => {
       <Button disabled={pairingData == null} onClick={handleDissociate}>
         Disassociate Token
       </Button>
-      <Button disabled={pairingData == null} onClick={handle}>
+      <Button disabled={pairingData == null} onClick={handleAllowanceApprove}>
         Allowance Approve
       </Button>
-      <Button disabled={pairingData == null} onClick={handle}>
+      <Button disabled={pairingData == null} onClick={handleAllowanceDelete}>
         Allowance Delete
       </Button>
-      <Button disabled={pairingData == null} onClick={handle}>
+      <Button disabled={pairingData == null} onClick={handleUpdate}>
         Update Account
       </Button>
     </Space>
