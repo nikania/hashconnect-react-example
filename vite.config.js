@@ -7,7 +7,5 @@ export default defineConfig({
   define: {
     global: "globalThis",
   },
-  server: {
-    port: 3033,
-  },
+  base: "https://nikania.github.io/hashconnect-react-example/",
 });
