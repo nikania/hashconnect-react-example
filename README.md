@@ -4,7 +4,7 @@ Example React application using [Hashconnect library](https://github.com/Hashpac
 
 See hook [useHashconnect](https://github.com/nikania/hashconnect-react-example/blob/main/src/hooks/useHashconnect.jsx) for more information.
 
-You can try [deployed on GitHub pages app](http://nikania.github.io/hashconnect-react-example)
+You can try [deployed on GitHub pages app](https://nikania.github.io/hashconnect-react-example/)
 
 ## Usage
 
