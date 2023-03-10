@@ -1,16 +1,20 @@
 {
-  "name": "example-forwards-dapp",
+  "name": "hashconnect-react-dapp",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "homepage": "http://nikania.github.io/hashconnect-react-example",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@hashgraph/sdk": "^2.18.3",
     "antd": "^4.23.5",
+    "gh-pages": "^5.0.0",
     "hashconnect": "^0.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
