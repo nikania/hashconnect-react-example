@@ -2,6 +2,8 @@
 
 Example React application using [Hashconnect library](https://github.com/Hashpack/hashconnect) to connect to Hashpack wallet to create tokens, manage accounts, etc.
 
+See hook [useHashconnect](https://github.com/nikania/hashconnect-react-example/blob/main/src/hooks/useHashconnect.jsx) for more information.
+
 ## Usage
 
 ### Environment

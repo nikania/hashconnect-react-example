@@ -11,7 +11,7 @@ export default async function WipeTokenTransaction(values, signingAcct, sendTran
     .setAccountId(values.accountId)
     .setAmount(values.amount);
 
-  let result = await sendTransaction(transaction, signingAcct);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export const FormTokenWipe = ({ form, onSubmit }) => {

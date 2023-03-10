@@ -8,7 +8,7 @@ export default async function DeleteTokenTransaction(values, signingAcct, sendTr
 
   let transaction = new TokenDeleteTransaction().setTokenId(values.tokenId);
 
-  let result = await sendTransaction(transaction, signingAcct);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export const FormTokenDelete = ({ form, onSubmit }) => {

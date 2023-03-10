@@ -8,7 +8,7 @@ export default async function MintTokenTransaction(values, signingAcct, sendTran
 
   let transaction = new TokenMintTransaction().setTokenId(values.tokenId).setAmount(values.amount);
 
-  let result = await sendTransaction(transaction, signingAcct);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export async function BurnTokenTransaction(values, signingAcct, sendTransaction) {
@@ -16,7 +16,7 @@ export async function BurnTokenTransaction(values, signingAcct, sendTransaction)
 
   let transaction = new TokenBurnTransaction().setTokenId(values.tokenId).setAmount(values.amount);
 
-  let result = await sendTransaction(transaction, signingAcct);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export const FormTokenSupply = ({ form, onSubmit }) => {

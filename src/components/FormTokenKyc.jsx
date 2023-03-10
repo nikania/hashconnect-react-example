@@ -10,7 +10,7 @@ export default async function GrantKycTokenTransaction(values, signingAcct, send
     .setTokenId(values.tokenId)
     .setAccountId(values.accountId);
 
-  let result = await sendTransaction(transaction, signingAcct);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export async function RevokeKycTokenTransaction(values, signingAcct, sendTransaction) {
@@ -20,7 +20,7 @@ export async function RevokeKycTokenTransaction(values, signingAcct, sendTransac
     .setTokenId(values.tokenId)
     .setAccountId(values.accountId);
 
-  let result = await sendTransaction(transaction, signingAcct);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export const FormTokenKyc = ({ form, onSubmit }) => {

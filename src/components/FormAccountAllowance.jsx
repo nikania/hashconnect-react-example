@@ -1,10 +1,6 @@
 import React from "react";
 import { Form, Input, InputNumber, Switch } from "antd";
-import {
-  AccountAllowanceApproveTransaction,
-  AccountAllowanceDeleteTransaction,
-  Hbar,
-} from "@hashgraph/sdk";
+import { AccountAllowanceApproveTransaction, Hbar } from "@hashgraph/sdk";
 import Common from "./Common";
 
 export default async function AllowanceApproveTransaction(values, signingAcct, sendTransaction) {

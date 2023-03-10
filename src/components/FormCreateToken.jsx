@@ -1,12 +1,6 @@
 import React from "react";
 import { Form, Input, Select, InputNumber, Switch } from "antd";
-import {
-  PublicKey,
-  TransactionReceipt,
-  TokenCreateTransaction,
-  TokenSupplyType,
-  TokenType,
-} from "@hashgraph/sdk";
+import { PublicKey, TokenCreateTransaction, TokenSupplyType, TokenType } from "@hashgraph/sdk";
 
 export default async function CreateTokenTransaction(values, signingAcct, sendTransaction) {
   if (import.meta.env.VITE_DEBUG) {
@@ -50,15 +44,7 @@ export default async function CreateTokenTransaction(values, signingAcct, sendTr
     transaction.setWipeKey(key);
   }
 
-  let result = await sendTransaction(transaction, signingAcct);
-
-  //handle response
-  let responseData = {
-    response: result,
-    receipt: null,
-  };
-
-  if (result.success) responseData.receipt = TransactionReceipt.fromBytes(result.receipt);
+  await sendTransaction(transaction, signingAcct);
 }
 
 export const FormCreateToken = ({ form, onSubmit }) => {
