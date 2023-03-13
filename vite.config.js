@@ -7,5 +7,5 @@ export default defineConfig({
   define: {
     global: "globalThis",
   },
-  base: "https://nikania.github.io/hashconnect-react-example/",
+  base: "/hashconnect-react-example/",
 });
